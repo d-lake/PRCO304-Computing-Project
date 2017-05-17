@@ -1,0 +1,21 @@
+---
+Name: mysiteroutes
+After: framework/routes#coreroutes
+---
+
+Director:
+        rules:
+            'addImage//$Action/$ID' : 'Page_Controller'
+            'likeImage//$Action/$ID' : 'Page_Controller'
+            'galleryAddImage//$Action/$ID' : 'GalleryPage_Controller'
+            'galleryLikeImage//$Action/$ID' : 'GalleryPage_Controller'
+            'galleryRemoveImage//$Action/$ID' : 'GalleryPage_Controller'
+            'memberFollow//$Action/$ID' : 'MemberPage_Controller'
+            'createGalleryEditImages//$Action/$ID' : 'MemberPage_Controller'
+            'addGalleryEditImages//$Action/$ID' : 'GalleryPage_Controller'
+            'editImage//$Action/$ID' : 'GalleryPage_Controller'
+            'searchPage//$Action/$ID' : 'Page_Controller'
+            'searchMemberPage//$Action/$ID' : 'MemberPage_Controller'
+            'searchGalleryPage//$Action/$ID' : 'GalleryPage_Controller'
+            'searchShopPage//$Action/$ID' : 'ShopPage_Controller'
+            'removeGallery//$Action/$ID' : 'GalleryPage_Controller'
