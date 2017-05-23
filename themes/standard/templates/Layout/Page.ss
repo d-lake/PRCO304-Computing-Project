@@ -1,7 +1,7 @@
 <div id="home-header" class="text-center">
 	<%-- <a class="active">All</a><span class="search-divider">|</span><a>Images</a><span class="search-divider">|</span><a>People</a><span class="search-divider">|</span><a>Shops</a> --%>
 </div>
-$retrieveAndAddUsersForm
+<%-- $retrieveAndAddUsersForm --%>
 <div id="Home" class="container-fluid">
 	<div class="grid-container">
 		<div class="grid">
