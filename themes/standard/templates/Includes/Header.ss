@@ -7,38 +7,27 @@
 	    		<%-- <img alt="Logo" src=""> --%>
 	  		</div>
 	  		<div class="left-cell filter-button">
-	  			<button type="button" class="btn" data-toggle="dropdown">
-                	<span id="search_concept">Filter by</span> <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#all">All</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#images">Images</a></li>
-                  <li><a href="#galleries">Galleries</a></li>
-                  <li><a href="#people">People</a></li>
-                  <li><a href="#shops">Shops</a></li>
-                </ul>
-	  		</div>
+		  		<div id="Btn-Filter">
+		  			<button type="button" class="btn" data-toggle="dropdown" data-filter="Images">
+	                	Images&nbsp<i class="fa fa-caret-down" aria-hidden="true"></i>
+	                </button>
+	                <ul class="dropdown-menu" role="menu">
+	                  <li><a>Images</a></li>
+	                  <li><a>Galleries</a></li>
+	                  <li><a>People</a></li>
+	                  <li><a>Shops</a></li>
+	                </ul>
+	            </div>
+		  		</div>
 	  		<div class="filler-cell search-input">
 		  		<div class="navbar-form" role="search">
 					<div class="form-group has-feedback">
 					   	<input id="Searchbar" type="text" class="form-control" placeholder="Search" value="$SessionSearch">
 					   	<span class="search-icon glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
-					   	<div id="Searchlist" class="dropdown-menu">
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						    <li class="dropdown-item"><a href="#">Search Item</a></li>
-						 </div>
 					</div>
 					<%-- <button type="submit" class="btn btn-default">Submit</button> --%>
 				</div>
+
 	  		</div>
 	  		<div class="right-cell">
 	  			<a  href="/members/view/$CurrentMember.ID" class="fa-hover"><i class="fa fa-user-circle-o fa-header-icon fa-fw" aria-hidden="true"></i></a>

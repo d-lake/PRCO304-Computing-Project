@@ -1074,3 +1074,9 @@ object-position: center;
 #ForgotPassword {
   display: none;
 }
+#Btn-Filter .fa {
+  font-size:14px !important;
+}
+#Btn-filter {
+  width:94px;
+}

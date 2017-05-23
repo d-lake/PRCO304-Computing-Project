@@ -21,7 +21,8 @@ class Shop extends DataObject {
     );
 
     private static $defaults = array (
-        'ShopPageID' => 9
+        'ShopPageID' => 9,
+        'Title' => 'Shop'
     );
 
     public function Link() {

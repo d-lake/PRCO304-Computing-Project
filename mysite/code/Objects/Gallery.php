@@ -15,7 +15,8 @@ class Gallery extends DataObject {
     );
 
     private static $defaults = array (
-        'GalleryPageID' => 6
+        'GalleryPageID' => 6,
+        'Title' => 'Gallery'
     );
 
     public function Link() {

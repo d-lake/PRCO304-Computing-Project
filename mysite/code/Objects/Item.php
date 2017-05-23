@@ -15,6 +15,10 @@ class Item extends DataObject {
         'Shop' => 'Shop'
     );
 
+    private static $defaults = array (
+        'Title' => 'Item'
+    );
+
     public function firstImage() {
         return $this->Image()->First();
     }

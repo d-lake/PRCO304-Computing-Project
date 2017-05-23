@@ -655,6 +655,7 @@ $(function() {
         e.stopPropagation();
         if (e.keyCode == 13) {
             var search = $("#Searchbar").val();
+            var filter = $("#Btn-Filter .btn").attr('data-filter');
 
             $pageType = $('body').attr("class");
             $url = "";
@@ -675,7 +676,7 @@ $(function() {
             }
 
             $.ajax({
-              url: $url+"/search",
+              url: $url+"/search?filter="+filter,
               type: 'GET',
               data: {search: search},
               success:function(data) {
@@ -715,6 +716,11 @@ $(function() {
     $("#Btn-Sort .dropdown-menu li ").click(function(){
       $("#Btn-Sort .btn").html($(this).text()+'&nbsp<i class="fa fa-caret-down" aria-hidden="true"></i>');
       $("#Btn-Sort .btn").attr("data-sort", $(this).text());
+    });
+
+    $("#Btn-Filter .dropdown-menu li ").click(function(){
+      $("#Btn-Filter .btn").html($(this).text()+'&nbsp<i class="fa fa-caret-down" aria-hidden="true"></i>');
+      $("#Btn-Filter .btn").attr("data-filter", $(this).text());
     });
 
     $('#Shop').on('click', '.img-container .hovereffect>a', function () {

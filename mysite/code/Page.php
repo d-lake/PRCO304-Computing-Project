@@ -53,7 +53,7 @@ class Page_Controller extends ContentController {
 	        $sessionSearchVal = implode(" ", $sessionSearch);
 		} else {
 	        $sessionSearchVal = "";
-			$images = Image::get()->sort('Title', DESC);
+			$images = Image::get();
 		}
 		
 		$currentMember = Member::currentUser();
@@ -238,102 +238,241 @@ class Page_Controller extends ContentController {
 
     public function search(SS_HTTPRequest $request) {
         if (Director::is_ajax()){
-        	if($request->getVar('search')) {
-                $searchArray = explode(" ", $request->getVar('search'));
-                $explodedSearchArray = array_map('trim', $searchArray);
-                Session::clear('Search');
-                Session::save();
-                Session::set('Search', $explodedSearchArray);
-                Session::save();
+        	$filter = $request->getVar('filter');
+        	if($filter == "Shops") {
 
-                $images = new ArrayList();
+        		if($request->getVar('search')) {
+	                $searchArray = explode(" ", $request->getVar('search'));
+	                $explodedSearchArray = array_map('trim', $searchArray);
+	                Session::clear('Search');
+	                Session::save();
+	                Session::set('Search', $explodedSearchArray);
+	                Session::save();
 
-	        	foreach($explodedSearchArray as $searchItem) {
-	        		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
+	                $shops = new ArrayList();
 
-		        	foreach ($imageSet as $image) {
-		        		$images->push($image);
+		        	foreach($explodedSearchArray as $searchItem) {
+		        		$shopSet = Shop::get()->filter(array('Title:PartialMatch' => $searchItem));
+
+			        	foreach ($shopSet as $shop) {
+			        		$shops->push($shop);
+			        	}
 		        	}
-	        	}
+			        $shops->removeDuplicates();
+	            } else {
+	            	Session::clear('Search');
+	                Session::save();
+        			$shops = Shop::get();
+	            }
 
-				foreach($explodedSearchArray as $searchItem) {
-		        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
-
-		        	foreach ($tagPartials as $manyTag) {
-		        		foreach ($manyTag->Image() as $tag) {
-		        			$singleImage = Image::get()->byId($tag->ID);
-							$images->push($singleImage);
-		        		}
-		        	}
+		        $allShops = new ArrayList();
+		        foreach ($shops as $shop) {
+		        	$allShops->push(new ArrayData(array('Shop' => $shop, 'shopImage' => $shop->ShopProfilePicture()->Image())));
 		        }
-		        $images->removeDuplicates();
-            } else {
-            	Session::clear('Search');
-                Session::save();
-                $images = Image::get()->sort('Title', DESC);
-            }
+
+        		$paginatedShop = PaginatedList::create(
+		            $allShops,
+		            $request
+		        )->setPageLength(50)
+		         ->setPaginationGetVar('shop');
+		        
+				$data = array (
+		            'Shops' => $paginatedShop
+		        );
+	        	return $this->Customise($data)->renderWith('HomeShops');
+        	} else if($filter == "Galleries") {
+
+        		if($request->getVar('search')) {
+	                $searchArray = explode(" ", $request->getVar('search'));
+	                $explodedSearchArray = array_map('trim', $searchArray);
+	                Session::clear('Search');
+	                Session::save();
+	                Session::set('Search', $explodedSearchArray);
+	                Session::save();
+
+	                $galleries = new ArrayList();
+
+		        	foreach($explodedSearchArray as $searchItem) {
+		        		$gallerySet = Gallery::get()->filter(array('Title:PartialMatch' => $searchItem));
+
+			        	foreach ($gallerySet as $gallery) {
+			        		$galleries->push($gallery);
+			        	}
+		        	}
+			        $galleries->removeDuplicates();
+	            } else {
+	            	Session::clear('Search');
+	                Session::save();
+        			$galleries = Gallery::get();
+	            }
+
+		        $allGalleries = new ArrayList();
+		        foreach ($galleries as $gallery) {
+		        	$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'galleryImage' => $gallery->firstImage())));
+		        }
+
+        		$paginatedGallery = PaginatedList::create(
+		            $allGalleries,
+		            $request
+		        )->setPageLength(50)
+		         ->setPaginationGetVar('gallery');
+		        
+				$data = array (
+		            'Galleries' => $paginatedGallery
+		        );
+	        	return $this->Customise($data)->renderWith('HomeGalleries');
+        	} else if($filter == "People") {
+
+        		if($request->getVar('search')) {
+	                $searchArray = explode(" ", $request->getVar('search'));
+	                $explodedSearchArray = array_map('trim', $searchArray);
+	                Session::clear('Search');
+	                Session::save();
+	                Session::set('Search', $explodedSearchArray);
+	                Session::save();
+
+	                $people = new ArrayList();
+
+		        	foreach($explodedSearchArray as $searchItem) {
+		        		$peopleFirstNameSet = Member::get()->filter(array('FirstName:PartialMatch' => $searchItem));
+
+			        	foreach ($peopleFirstNameSet as $person) {
+			        		$people->push($person);
+			        	}
+
+		        		$peopleSurnameSet = Member::get()->filter(array('Surname:PartialMatch' => $searchItem));
+
+			        	foreach ($peopleSurnameSet as $person) {
+			        		$people->push($person);
+			        	}
+
+		        		$peopleUsernameSet = Member::get()->filter(array('UserName:PartialMatch' => $searchItem));
+
+			        	foreach ($peopleUsernameSet as $person) {
+			        		$people->push($person);
+			        	}
+		        	}
+			        $people->removeDuplicates();
+	            } else {
+	            	Session::clear('Search');
+	                Session::save();
+        			$people = Member::get();
+	            }
+
+		        $allPeople = new ArrayList();
+		        foreach ($people as $person) {
+		        	$allPeople->push(new ArrayData(array('Member' => $person, 'memberImage' => $person->MemberProfilePicture()->Image())));
+		        }
+
+        		$paginatedPeople = PaginatedList::create(
+		            $allPeople,
+		            $request
+		        )->setPageLength(50)
+		         ->setPaginationGetVar('people');
+		        
+				$data = array (
+		            'People' => $paginatedPeople
+		        );
+	        	return $this->Customise($data)->renderWith('HomePeople');
+        	} else if($filter == "Images") {
+    			if($request->getVar('search')) {
+	                $searchArray = explode(" ", $request->getVar('search'));
+	                $explodedSearchArray = array_map('trim', $searchArray);
+	                Session::clear('Search');
+	                Session::save();
+	                Session::set('Search', $explodedSearchArray);
+	                Session::save();
+
+	                $images = new ArrayList();
+
+		        	foreach($explodedSearchArray as $searchItem) {
+		        		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
+
+			        	foreach ($imageSet as $image) {
+			        		$images->push($image);
+			        	}
+		        	}
+
+					foreach($explodedSearchArray as $searchItem) {
+			        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
+
+			        	foreach ($tagPartials as $manyTag) {
+			        		foreach ($manyTag->Image() as $tag) {
+			        			$singleImage = Image::get()->byId($tag->ID);
+								$images->push($singleImage);
+			        		}
+			        	}
+			        }
+			        $images->removeDuplicates();
+	            } else {
+	            	Session::clear('Search');
+	                Session::save();
+	                $images = Image::get();
+	            }
 
 
-			$currentMember = Member::currentUser();
-		    $memberGalleries = $currentMember->Gallery();
+				$currentMember = Member::currentUser();
+			    $memberGalleries = $currentMember->Gallery();
 
-		    $galleries = $memberGalleries->exclude("Title", array("Favourites", "Profile Pictures", "Cover Pictures"));
+			    $galleries = $memberGalleries->exclude("Title", array("Favourites", "Profile Pictures", "Cover Pictures"));
 
-			$imagesArray = new ArrayList();
+				$imagesArray = new ArrayList();
 
-			foreach ($images as $image) {
-				$id = $image->OwnerID;
-				$member = Member::get()->byId($id);
+				foreach ($images as $image) {
+					$id = $image->OwnerID;
+					$member = Member::get()->byId($id);
 
-				$userName = $member->UserName;
-	            $memberID = $member->ID;    
+					$userName = $member->UserName;
+		            $memberID = $member->ID;    
 
-				$userURL = "members/view/".$memberID;
+					$userURL = "members/view/".$memberID;
 
-				$profilePictureImage = false;
+					$profilePictureImage = false;
 
-				if($profilePicture = MemberProfilePicture::get()->byId($member->MemberProfilePictureID)) {
-					$profilePictureImage = Image::get()->byId($profilePicture->ImageID);
-				}
+					if($profilePicture = MemberProfilePicture::get()->byId($member->MemberProfilePictureID)) {
+						$profilePictureImage = Image::get()->byId($profilePicture->ImageID);
+					}
 
-				$allGalleries = new ArrayList();
+					$allGalleries = new ArrayList();
 
-				foreach ($galleries as $gallery) {	
-					$count = 0;
-					foreach($image->Gallery() as $relatedGallery) {
-						if($relatedGallery->ID == $gallery->ID) {
-							$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'Related' => true)));
-							$count++;
+					foreach ($galleries as $gallery) {	
+						$count = 0;
+						foreach($image->Gallery() as $relatedGallery) {
+							if($relatedGallery->ID == $gallery->ID) {
+								$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'Related' => true)));
+								$count++;
+							}
+						}
+						if ($count == 0) {
+							$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'Related' => false)));
 						}
 					}
-					if ($count == 0) {
-						$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'Related' => false)));
-					}
-				}
 
-				$isFavourited = null;
-				if($favouritedGallery = DataObject::get_one("Gallery", "MemberID = '".$currentMember->ID."' AND Title = 'Favourites'")) {
-					foreach($favouritedGallery->Image() as $loopedImage) {
-						if($loopedImage->ID == $image->ID) {
-							$isFavourited = true;
+					$isFavourited = null;
+					if($favouritedGallery = DataObject::get_one("Gallery", "MemberID = '".$currentMember->ID."' AND Title = 'Favourites'")) {
+						foreach($favouritedGallery->Image() as $loopedImage) {
+							if($loopedImage->ID == $image->ID) {
+								$isFavourited = true;
+							}
 						}
 					}
+
+					$imagesArray->push(new ArrayData(array('Image' => $image, 'ProfilePictureImage' => $profilePictureImage, 'UserURL' => $userURL, 'AllGalleries' => $allGalleries, 'isFavourited' => $isFavourited, 'userName' => $userName)));
 				}
 
-				$imagesArray->push(new ArrayData(array('Image' => $image, 'ProfilePictureImage' => $profilePictureImage, 'UserURL' => $userURL, 'AllGalleries' => $allGalleries, 'isFavourited' => $isFavourited, 'userName' => $userName)));
-			}
+				$paginatedImages = PaginatedList::create(
+		            $imagesArray,
+		            $request
+		        )->setPageLength(50)
+		         ->setPaginationGetVar('images');
 
-			$paginatedImages = PaginatedList::create(
-	            $imagesArray,
-	            $request
-	        )->setPageLength(50)
-	         ->setPaginationGetVar('images');
+				$data = array (
+		            'Images' => $paginatedImages
+		        );
 
-			$data = array (
-	            'Images' => $paginatedImages
-	        );
-
-        	return $this->Customise($data)->renderWith('HomeImages');
+	        	return $this->Customise($data)->renderWith('HomeImages');
+    		}
+        	
         } else {
             return null;
         }
