@@ -293,17 +293,19 @@ class Page_Controller extends ContentController {
 	                $galleries = new ArrayList();
 
 		        	foreach($explodedSearchArray as $searchItem) {
-		        		$gallerySet = Gallery::get()->filter(array('Title:PartialMatch' => $searchItem));
+		        		$galleryFilter = Gallery::get()->filter(array('Title:PartialMatch' => $searchItem));
+		        		$gallerySet = $galleryFilter->exclude('Title', array('Favourites','Profile Pictures', 'Cover Pictures'));
 
 			        	foreach ($gallerySet as $gallery) {
 			        		$galleries->push($gallery);
 			        	}
 		        	}
 			        $galleries->removeDuplicates();
+
 	            } else {
 	            	Session::clear('Search');
 	                Session::save();
-        			$galleries = Gallery::get();
+        			$galleries = Gallery::get()->exclude('Title', array('Favourites','Profile Pictures', 'Cover Pictures'));
 	            }
 
 		        $allGalleries = new ArrayList();
