@@ -3,7 +3,7 @@
 		<div class="img-container">
 		    <div class="hovereffect">
 		         <a href="" data-toggle="modal" data-target="#View_Item_Modal">
-		        	<img class="img-responsive" src="$firstImage.URL" alt="">
+		        	<img class="img-responsive" src="<% if $firstImage %>$firstImage.Fill(248,248).Link<% else %>$themeDir/images/shop-placeholder.jpg<% end_if %>" alt="">
 		        </a>
 	        	<div class="image-icon-holder">
 	        		<% if Up.ifMyShop %>
