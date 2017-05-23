@@ -28,34 +28,35 @@ class Page_Controller extends ContentController {
 		if($redirect = $this->redirectToLogin()) {
 			return $redirect;
 		}
+
 		$images = Image::get();
 
-		// if($sessionSearch = Session::get('Search')) {
-		// 	$images = new ArrayList();
-  //       	foreach($sessionSearch as $searchItem) {
-  //       		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
+		if($sessionSearch = Session::get('Search')) {
+			$images = new ArrayList();
+        	foreach($sessionSearch as $searchItem) {
+        		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
 
-	 //        	foreach ($imageSet as $image) {
-	 //        		$images->push($image);
-	 //        	}
-  //       	}
+	        	foreach ($imageSet as $image) {
+	        		$images->push($image);
+	        	}
+        	}
 
-		// 	foreach($sessionSearch as $searchItem) {
-	 //        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
+			foreach($sessionSearch as $searchItem) {
+	        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
 
-	 //        	foreach ($tagPartials as $manyTag) {
-	 //        		foreach ($manyTag->Image() as $tag) {
-	 //        			$singleImage = Image::get()->byId($tag->ID);
-		// 				$images->push($singleImage);
-	 //        		}
-	 //        	}
-	 //        }
-	 //        $images->removeDuplicates();
-	 //        $sessionSearchVal = implode(" ", $sessionSearch);
-		// } else {
-	 //        $sessionSearchVal = "";
-		// 	$images = Image::get();
-		// }
+	        	foreach ($tagPartials as $manyTag) {
+	        		foreach ($manyTag->Image() as $tag) {
+	        			$singleImage = Image::get()->byId($tag->ID);
+						$images->push($singleImage);
+	        		}
+	        	}
+	        }
+	        $images->removeDuplicates();
+	        $sessionSearchVal = implode(" ", $sessionSearch);
+		} else {
+	        $sessionSearchVal = "";
+			$images = Image::get();
+		}
 		
 		$currentMember = Member::currentUser();
 	    $memberGalleries = $currentMember->Gallery();
@@ -141,12 +142,17 @@ class Page_Controller extends ContentController {
     	$curl = curl_init();
 		curl_setopt_array($curl, array(
 		    CURLOPT_RETURNTRANSFER => 1,
-		    CURLOPT_URL => 'https://randomuser.me/api/?results=1000'
+		    CURLOPT_URL => 'https://randomuser.me/api/?results=500'
 		));
 		$jsonData = json_decode(curl_exec($curl));
     	curl_close($curl);
 
-    	foreach ($jsonData->results as $data) {
+    	foreach ($jsonData->results as $key => $data) {
+    		// var_dump($data);
+    		$parentFolder = Folder::find_or_make('Uploads/Images');
+    		$newURL = 'Generated-Image-'.$key.'.jpg';
+    		$imageString = file_get_contents($data->picture->large);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/assets/Uploads/Images/'.$newURL, $imageString);
 
     		$member = new Member();
     		$member->FirstName = $data->name->first;
@@ -155,7 +161,8 @@ class Page_Controller extends ContentController {
     		$member->UserName = $data->login->username;
     		$password = $data->login->password;
     		$member->changePassword("password");
-    		$member->write();
+    		$member->MemberProfilePictureID = $imgID;
+    		$savedMember = $member->write();
 
 	    	if(!$userGroup = DataObject::get_one('Group', "Code = 'registered-users'")){
 	            $userGroup = new Group();
@@ -165,6 +172,26 @@ class Page_Controller extends ContentController {
 	            $userGroup->Members()->add($member);
 	        }
 	        $userGroup->Members()->add($member);
+
+    		$img = new Image();
+    		$img->ParentID = $parentFolder->ID;
+			$img->Filename = $newURL;
+			$img->Name = "Generated Image ".$key.".jpg";
+			$img->Title = "Generated Image ".$key.".jpg";
+			$img->OwnerID = $savedMember;
+			$img->setParentID($parentFolder->ID);
+			$img->ShowInSearch = 1;
+			$imgID = $img->write();
+
+			$pp = new MemberProfilePicture();
+			$pp->ImageID = $imgID;
+	        $pp = $pp->write();
+	        $returnedMember = DataObject::get_by_id('Member', $savedMember);
+			$returnedMember->MemberProfilePictureID = $pp;
+			$returnedMember->write();
+
+			
+    		
     	}
     }
 
