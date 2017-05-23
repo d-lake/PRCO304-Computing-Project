@@ -210,7 +210,7 @@ class Page_Controller extends ContentController {
 		    	$gallery->Image()->add($image);
 	        } else {
 	            $newGallery = new Gallery();
-	            $newGallery->MemberID = $member->ID;
+	            $newGallery->MemberID = $memberID;
 	            $newGallery->Title = "Favourites";
 	            $newGallery->write();
 		    	$newGallery->Image()->add($image);
@@ -308,7 +308,9 @@ class Page_Controller extends ContentController {
 
 		        $allGalleries = new ArrayList();
 		        foreach ($galleries as $gallery) {
-		        	$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'galleryImage' => $gallery->firstImage())));
+		        	$member = $gallery->Member();
+		        	$profilePictureImage = $member->MemberProfilePicture()->Image();
+		        	$allGalleries->push(new ArrayData(array('Gallery' => $gallery, 'galleryImage' => $gallery->firstImage(), 'ProfilePictureImage' => $profilePictureImage, 'Member' => $member)));
 		        }
 
         		$paginatedGallery = PaginatedList::create(

@@ -1077,6 +1077,9 @@ object-position: center;
 #Btn-Filter .fa {
   font-size:14px !important;
 }
-#Btn-filter {
+#Btn-Filter {
   width:94px;
+}
+#Btn-Filter .btn{
+  width: 100%;
 }

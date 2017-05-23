@@ -10,6 +10,11 @@
         		<span class="">
         	</div>
 		</div>
+    	<div class="img-owner-container">
+    		<a href="$Member.Link">
+    			<img class="img-owner" src="<% if $ProfilePictureImage %>$ProfilePictureImage.Fill(40,40).Link<% else %>$themeDir/images/profile-placeholder.jpg<% end_if %>" data-toggle="tooltip" data-placement="bottom" title="$Member.UserName">
+    		</a>
+    	</div>
     	<div class="img-info">
     		<div class="img-title">
     			$Gallery.Title
