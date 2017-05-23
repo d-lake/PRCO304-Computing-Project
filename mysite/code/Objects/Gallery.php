@@ -10,6 +10,7 @@ class Gallery extends DataObject {
 
     private static $has_one = array(
         'Member' => 'Member',
+        'Shop' => 'Shop',
         'GalleryPage' => 'GalleryPage'
     );
 

@@ -37,10 +37,20 @@ class GalleryPage_Controller extends Page_Controller {
 
         if(is_numeric($Params['ID']) && $gallery = DataObject::get_by_id('Gallery', (int)$Params['ID'])) { 
             $currentMember = Member::currentUser();
-            if($gallery->MemberID == $currentMember->ID) {
-                return true;
-            } else {
-                return false;
+            if($gallery->MemberID) {
+            	if($gallery->MemberID == $currentMember->ID) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+            } else if($gallery->ShopID) {
+            	foreach ($currentMember->Shop() as $shop) {
+            		if($gallery->ShopID == $shop->ID) {
+	                return true;
+            		}else {
+		                return false;
+		            }
+            	}            
             }
         }
     }
@@ -63,18 +73,30 @@ class GalleryPage_Controller extends Page_Controller {
 			$imagesArray = new ArrayList();
 
 			foreach ($images as $image) {
-				$id = $image->OwnerID;
-				$member = Member::get()->byId($id);
-
-	            $userName = $member->UserName;
-            	$memberID = $member->ID;    
-
-				$userURL = "members/view/".$memberID;
-
+				$shop = false;
+				$member = false;
+				$userURL = false;
+				$userName = false;
 				$profilePictureImage = false;
 
-				if($profilePicture = MemberProfilePicture::get()->byId($member->MemberProfilePictureID)) {
-					$profilePictureImage = Image::get()->byId($profilePicture->ImageID);
+				if($shopID = $thisGallery->ShopID) {
+					$shop = Shop::get()->byId($shopID);
+					$userURL = "shops/view/".$shopID;
+					$userName = $shop->Title;
+
+					if($profilePicture = ShopProfilePicture::get()->byId($shop->ShopProfilePictureID)) {
+						$profilePictureImage = Image::get()->byId($profilePicture->ImageID);
+					}
+				}
+
+				if($memberID = $thisGallery->MemberID) {
+					$member = Member::get()->byId($image->OwnerID);
+					$userURL = "members/view/".$memberID;
+					$userName = $member->UserName;
+
+					if($profilePicture = MemberProfilePicture::get()->byId($member->MemberProfilePictureID)) {
+						$profilePictureImage = Image::get()->byId($profilePicture->ImageID);
+					}
 				}
 
 				$allGalleries = new ArrayList();
@@ -101,7 +123,7 @@ class GalleryPage_Controller extends Page_Controller {
 					}
 				}
 
-				$imagesArray->push(new ArrayData(array('Image' => $image, 'ProfilePictureImage' => $profilePictureImage, 'UserURL' => $userURL, 'AllGalleries' => $allGalleries, 'isFavourited' => $isFavouritel, 'userName' => $userName)));
+				$imagesArray->push(new ArrayData(array('Image' => $image, 'ProfilePictureImage' => $profilePictureImage, 'UserURL' => $userURL, 'AllGalleries' => $allGalleries, 'isFavourited' => $isFavourited, 'userName' => $userName)));
 			}
 
 			$paginatedImages = PaginatedList::create(

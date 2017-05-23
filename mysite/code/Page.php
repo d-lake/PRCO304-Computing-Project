@@ -138,39 +138,32 @@ class Page_Controller extends ContentController {
 
     public function retrieveAndAddUsers($data, $form) {
     	$curl = curl_init();
-		// Set some options - we are passing in a useragent too here
 		curl_setopt_array($curl, array(
 		    CURLOPT_RETURNTRANSFER => 1,
-		    // CURLOPT_URL => 'https://randomuser.me/api/'
-		    CURLOPT_URL => 'https://euw1.api.riotgames.com/lol/static-data/v3/champions?champData=all&api_key=RGAPI-2bfd21e5-c70f-4062-95e5-e0217513e966'
+		    CURLOPT_URL => 'https://randomuser.me/api/?results=1000'
 		));
 		$jsonData = json_decode(curl_exec($curl));
     	curl_close($curl);
 
-    	// foreach ($jsonData->results as $data) {
+    	foreach ($jsonData->results as $data) {
 
-    	// 	$member = new Member();
-    	// 	$member->FirstName = $data->name->first;
-    	// 	$member->Surname = $data->name->last;
-    	// 	$member->Email = $data->email;
-    	// 	$member->UserName = $data->login->username;
-    	// 	// $password = $data->login->password;
-    	// 	$member->changePassword("password");
-    	// 	$member->write();
+    		$member = new Member();
+    		$member->FirstName = $data->name->first;
+    		$member->Surname = $data->name->last;
+    		$member->Email = $data->email;
+    		$member->UserName = $data->login->username;
+    		$password = $data->login->password;
+    		$member->changePassword("password");
+    		$member->write();
 
-	    // 	if(!$userGroup = DataObject::get_one('Group', "Code = 'registered-users'")){
-	    //         $userGroup = new Group();
-	    //         $userGroup->Code = "registered-users";
-	    //         $userGroup->Title = "Users";
-	    //         $userGroup->Write();
-	    //         $userGroup->Members()->add($member);
-	    //     }
-	    //     $userGroup->Members()->add($member);
-    	// }
-
-    	foreach ($jsonData->data as $champion => $data) {
-    		var_dump($champion."</br>");
-    		var_dump($data."</br>");
+	    	if(!$userGroup = DataObject::get_one('Group', "Code = 'registered-users'")){
+	            $userGroup = new Group();
+	            $userGroup->Code = "registered-users";
+	            $userGroup->Title = "Users";
+	            $userGroup->Write();
+	            $userGroup->Members()->add($member);
+	        }
+	        $userGroup->Members()->add($member);
     	}
     }
 

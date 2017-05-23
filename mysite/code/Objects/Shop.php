@@ -15,7 +15,9 @@ class Shop extends DataObject {
     );
 
     private static $has_many = array(
-        'Item' => 'Item'
+        'Gallery' => 'Gallery',
+        'Item' => 'Item',
+        'Category' => 'Category'
     );
 
     private static $defaults = array (

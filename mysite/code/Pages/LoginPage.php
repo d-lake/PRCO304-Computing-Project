@@ -40,11 +40,11 @@ class LoginPage_Controller extends Page_Controller {
 
    public function doRegister($data, $form) {
     	if($member = DataObject::get_one("Member", "`Email` = '". Convert::raw2sql($data['Email']) . "'")) {
-            $form->AddErrorMessage('Email', "Sorry, that email address already exists. Please choose another.", 'bad');
+            $form->AddErrorMessage('Email', "Sorry that email address already exists. Please choose another.", 'bad');
             Session::set("FormInfo.Form_RegistrationForm.data", $data);     
             return $this->redirectBack();           
         } else if($member = DataObject::get_one("Member", "`UserName` = '". Convert::raw2sql($data['UserName']) . "'")) {
-            $form->AddErrorMessage('UserName', "Sorry, that user name has already been taken. Please choose another.", 'bad');
+            $form->AddErrorMessage('UserName', "Sorry that user name has already been taken. Please choose another.", 'bad');
             Session::set("FormInfo.Form_RegistrationForm.data", $data);     
             return $this->redirectBack();           
         } else {

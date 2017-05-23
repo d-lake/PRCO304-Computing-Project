@@ -8,7 +8,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                   <li><a id="Edit_Bio" href="#" data-toggle="modal" data-target="#Edit_Shop_Bio_Modal">Edit Shop Bio &nbsp <i class="fa fa-pencil"></i></a></li>
-                  <li><a id="Delete_Shop" href="#">Delete Shop &nbsp<i class="fa fa-trash"></i></a></li>
+                  <li><a id="Delete_Shop" href="/members/view/$CurrentMember.ID">Delete Shop &nbsp<i class="fa fa-trash"></i></a></li>
                   
                 </ul>
               </div>
@@ -18,19 +18,33 @@
 
 		<% with Shop %>
 			<% if $Title %>
-				$Title
+				<div id="Shop_Name" class="field">
+                      <label class="left"><h4>Name</h4></label>
+                      <p>$Title</p>
+                    </div>
 			<% end_if %>
 
 			<% if $ShopURL %>
-				$ShopURL
+			<div id="Shop_URL" class="field">
+                      <label class="left"><h4>Website</h4></label>
+                      <p>$ShopURL</p>
+                    </div>
+				
 			<% end_if %>
 
 			<% if $ShopEmail %>
-				$ShopEmail
+			<div id="Shop_Email" class="field">
+                      <label class="left"><h4>Email</h4></label>
+                      <p>$ShopEmail</p>
+                    </div>
+				
 			<% end_if %>
 
 			<% if $Bio %>
-				$Bio
+			<div id="Shop_Bio" class="field">
+                      <label class="left"><h4>Bio</h4></label>
+                      <p>$Bio</p>
+                    </div>
 			<% else %>
 				<div id="No-Bio" >
 		            <h3>

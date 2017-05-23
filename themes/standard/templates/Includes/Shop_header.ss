@@ -69,15 +69,6 @@
           <h4 class="modal-title" id="myModalLabel">Upload Cover Photo</h4>
         </div>
         <div class="modal-body">
-          <div id="CoverChoose" class="pick_zone">
-            <div class="dz-default dz-message">
-              <span>
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
-                <p>Click here select a photo.</p>
-              </span>
-            </div>
-          </div>
-          <div class="or-box"><h2><span>OR</span></h2></div>
           <div id="CoverUpload" class="drop_zone">
             <div class="dz-default dz-message">
               <span>
@@ -103,15 +94,6 @@
           <h4 class="modal-title" id="myModalLabel">Upload Profile Picture</h4>
         </div>
         <div class="modal-body">
-          <div id="ProfileChoose" class="pick_zone">
-            <div class="dz-default dz-message">
-              <span>
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
-                <p>Click here select a photo.</p>
-              </span>
-            </div>
-          </div>
-          <div class="or-box"><h2><span>OR</span></h2></div>
           <div id="ProfileUpload" class="drop_zone">
             <div class="dz-default dz-message">
               <span>

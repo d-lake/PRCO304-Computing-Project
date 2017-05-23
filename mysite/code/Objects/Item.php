@@ -7,7 +7,8 @@ class Item extends DataObject {
     );
 
     private static $many_many = array(
-        'Image' => 'Image'
+        'Image' => 'Image',
+        'Category' => 'Category'
     );
 
     private static $has_one = array (

@@ -19,3 +19,11 @@ Director:
             'searchGalleryPage//$Action/$ID' : 'GalleryPage_Controller'
             'searchShopPage//$Action/$ID' : 'ShopPage_Controller'
             'removeGallery//$Action/$ID' : 'GalleryPage_Controller'
+            'viewItem//$Action/$ID' : 'ShopPage_Controller'
+            'editItem//$Action/$ID' : 'ShopPage_Controller'
+            'shopRemoveItem//$Action/$ID' : 'ShopPage_Controller'
+            'removeShop//$Action/$ID' : 'ShopPage_Controller'
+            'createShopGallery//$Action/$ID' : 'ShopPage_Controller'
+            'category//$Action/$ID' : 'ShopPage_Controller'
+            'itemSearch//$Action/$ID' : 'ShopPage_Controller'
+

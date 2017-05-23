@@ -17,16 +17,18 @@
 		<div class="clearfix"></div>
 
 		<% with Member %>
-			<% if $FirstName %>
-				$FirstName
-			<% end_if %>
-
-			<% if $Surname %>
-				$Surname
+			<% if $FirstName || $LastName%>
+			<div id="Profile_Name" class="field">
+                      <label class="left"><h4>Name</h4></label>
+                      <p>$FirstName&nbsp$Surname</p>
+                    </div>
 			<% end_if %>
 
 			<% if $Bio %>
-				$Bio
+				<div id="Profile_Bio" class="field">
+                      <label class="left"><h4>Bio</h4></label>
+                      <p>$Bio</p>
+                    </div>
 			<% else %>
 				<div id="No-Bio" >
 		            <h3>
