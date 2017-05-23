@@ -28,33 +28,34 @@ class Page_Controller extends ContentController {
 		if($redirect = $this->redirectToLogin()) {
 			return $redirect;
 		}
+		$images = Image::get();
 
-		if($sessionSearch = Session::get('Search')) {
-			$images = new ArrayList();
-        	foreach($sessionSearch as $searchItem) {
-        		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
+		// if($sessionSearch = Session::get('Search')) {
+		// 	$images = new ArrayList();
+  //       	foreach($sessionSearch as $searchItem) {
+  //       		$imageSet = Image::get()->filter(array('Title:PartialMatch' => $searchItem));
 
-	        	foreach ($imageSet as $image) {
-	        		$images->push($image);
-	        	}
-        	}
+	 //        	foreach ($imageSet as $image) {
+	 //        		$images->push($image);
+	 //        	}
+  //       	}
 
-			foreach($sessionSearch as $searchItem) {
-	        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
+		// 	foreach($sessionSearch as $searchItem) {
+	 //        	$tagPartials = Tag::get()->filter(array('Tag:PartialMatch' => $searchItem));
 
-	        	foreach ($tagPartials as $manyTag) {
-	        		foreach ($manyTag->Image() as $tag) {
-	        			$singleImage = Image::get()->byId($tag->ID);
-						$images->push($singleImage);
-	        		}
-	        	}
-	        }
-	        $images->removeDuplicates();
-	        $sessionSearchVal = implode(" ", $sessionSearch);
-		} else {
-	        $sessionSearchVal = "";
-			$images = Image::get();
-		}
+	 //        	foreach ($tagPartials as $manyTag) {
+	 //        		foreach ($manyTag->Image() as $tag) {
+	 //        			$singleImage = Image::get()->byId($tag->ID);
+		// 				$images->push($singleImage);
+	 //        		}
+	 //        	}
+	 //        }
+	 //        $images->removeDuplicates();
+	 //        $sessionSearchVal = implode(" ", $sessionSearch);
+		// } else {
+	 //        $sessionSearchVal = "";
+		// 	$images = Image::get();
+		// }
 		
 		$currentMember = Member::currentUser();
 	    $memberGalleries = $currentMember->Gallery();
@@ -247,6 +248,7 @@ class Page_Controller extends ContentController {
 	                Session::clear('Search');
 	                Session::save();
 	                Session::set('Search', $explodedSearchArray);
+	                Session::set('Filter', $filter);
 	                Session::save();
 
 	                $shops = new ArrayList();
@@ -261,6 +263,7 @@ class Page_Controller extends ContentController {
 			        $shops->removeDuplicates();
 	            } else {
 	            	Session::clear('Search');
+	            	Session::clear('Filter');
 	                Session::save();
         			$shops = Shop::get();
 	            }
@@ -288,6 +291,7 @@ class Page_Controller extends ContentController {
 	                Session::clear('Search');
 	                Session::save();
 	                Session::set('Search', $explodedSearchArray);
+	                Session::set('Filter', $filter);
 	                Session::save();
 
 	                $galleries = new ArrayList();
@@ -304,6 +308,7 @@ class Page_Controller extends ContentController {
 
 	            } else {
 	            	Session::clear('Search');
+	            	Session::clear('Filter');
 	                Session::save();
         			$galleries = Gallery::get()->exclude('Title', array('Favourites','Profile Pictures', 'Cover Pictures'));
 	            }
@@ -333,6 +338,7 @@ class Page_Controller extends ContentController {
 	                Session::clear('Search');
 	                Session::save();
 	                Session::set('Search', $explodedSearchArray);
+	                Session::set('Filter', $filter);
 	                Session::save();
 
 	                $people = new ArrayList();
@@ -359,6 +365,7 @@ class Page_Controller extends ContentController {
 			        $people->removeDuplicates();
 	            } else {
 	            	Session::clear('Search');
+	            	Session::clear('Filter');
 	                Session::save();
         			$people = Member::get();
 	            }
@@ -385,6 +392,7 @@ class Page_Controller extends ContentController {
 	                Session::clear('Search');
 	                Session::save();
 	                Session::set('Search', $explodedSearchArray);
+	                Session::set('Filter', $filter);
 	                Session::save();
 
 	                $images = new ArrayList();
@@ -410,6 +418,7 @@ class Page_Controller extends ContentController {
 			        $images->removeDuplicates();
 	            } else {
 	            	Session::clear('Search');
+	            	Session::clear('Filter');
 	                Session::save();
 	                $images = Image::get();
 	            }
