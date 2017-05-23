@@ -142,7 +142,7 @@ class Page_Controller extends ContentController {
     	$curl = curl_init();
 		curl_setopt_array($curl, array(
 		    CURLOPT_RETURNTRANSFER => 1,
-		    CURLOPT_URL => 'https://randomuser.me/api/?results=500'
+		    CURLOPT_URL => 'https://randomuser.me/api/?results=100'
 		));
 		$jsonData = json_decode(curl_exec($curl));
     	curl_close($curl);
