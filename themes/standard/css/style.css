@@ -1064,7 +1064,7 @@ object-position: center;
 #Shop_Bio p, #Shop_URL p, #Shop_Name p, #Shop_Email p, #Profile_Bio p, #Profile_Name p {
     margin: 0 0 10px;
 }
-#Categories, #Add_Categories_Modal .field input {
+#Categories, #Add_Categories_Modal .field input, #Edit_Item_Modal .field input {
   width:100%;
 }
 

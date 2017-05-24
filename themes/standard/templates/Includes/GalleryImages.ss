@@ -8,7 +8,7 @@
 				        	<img class="img-responsive" src="$Image.ScaleWidth(248).Link" alt="">
 				        </a>
 			        	<div class="image-icon-holder">
-			        		<% if Up.Gallery.ifCurrentMembersGallery %>
+			        		<% if $Up.ifMyGallery %>
 								<div class="editImage image-icon"  data-toggle="modal" data-target="#Edit_Image_Modal">
 				        			<a>
 			                            <i class="fa fa-pencil"></i>
@@ -69,7 +69,7 @@
 				        	<img class="img-responsive" src="$Image.ScaleWidth(248).Link" alt="">
 				        </a>
 			        	<div class="image-icon-holder">
-			        		<% if Up.Gallery.ifCurrentMembersGallery %>
+			        		<% if $Up.ifMyGallery %>
 								<div class="editImage image-icon"  data-toggle="modal" data-target="#Edit_Image_Modal">
 				        			<a>
 			                            <i class="fa fa-pencil"></i>

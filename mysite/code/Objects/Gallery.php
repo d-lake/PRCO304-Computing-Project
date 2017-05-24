@@ -37,12 +37,4 @@ class Gallery extends DataObject {
             return false;
         }
     }
-
-    public function ifCurrentMembersGallery() {
-        if($this->MemberID == Member::currentUserID()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

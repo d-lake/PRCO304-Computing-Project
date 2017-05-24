@@ -17,6 +17,7 @@ class ShopPage_Controller extends Page_Controller {
         'EditShopBioForm',
         'search',
         'viewSingleItem',
+        'viewEditSingleItem',
         'editSingleItem',
         'removeItem',
         'deleteShop',
@@ -268,13 +269,48 @@ class ShopPage_Controller extends Page_Controller {
         }
     }
 
-    public function editSingleItem(SS_HTTPRequest $request) {
+    public function viewEditSingleItem(SS_HTTPRequest $request) {
         if (Director::is_ajax()){
-            echo "made it";
+            $item = DataObject::get_by_id('Item', $request->getVar('itemID'));
+            $imageArray = array();
+            foreach($item->Image() as $image) {
+                array_push($imageArray, $image->URL);
+            }
+            return json_encode(array("title" => $item->Title, "description" => $item->Description, "price" => $item->Price));
         } else {
             return null;
         }
     }
+
+    public function editSingleItem(SS_HTTPRequest $request) {
+        if (Director::is_ajax()){
+            $requestBody = json_decode($request->getBody(), true);
+            foreach($requestBody as $itemRequest) {
+                $item = Item::get()->byId($itemRequest["id"]);
+
+                if($itemTitle = $itemRequest["title"]) {
+                    $item->Title = ucfirst($itemTitle);
+                }
+                if($itemDesc = $itemRequest["description"]) {
+                    $item->Description = ucfirst($itemDesc);
+                }
+                if($itemPrice = $itemRequest["price"]) {
+
+                    if (strpos($itemPrice, '.') !== false) {
+                        $item->Price = $itemPrice;
+                    } else {
+                        $item->Price = $itemPrice.".00";
+                    }
+                    
+                }
+                $item->write();
+            }
+            return true;
+        } else {
+            return null;
+        }
+    }
+
 
     public function removeItem(SS_HTTPRequest $request) {
         if (Director::is_ajax()){

@@ -138,7 +138,7 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h4 class="modal-title" id="myModalLabel">Edit Recent Uploads</h4>
-		        <i class="fa fa-question-circle" aria-hidden="true"></i>
+
 		      </div>
 		      <div class="modal-body">
 		        <% loop $recentUploads %>
@@ -147,10 +147,6 @@
 				        	<div class="upload-image">
 				        		<img class="img-responsive" src="$Image.Fill(222,222).Link" alt="">
 				        		<div class="image-icon-holder">
-				                <div class="removeImage image-icon">
-			        			<a>
-			                        <i class="fa fa-times"></i>
-			                    </a>
 			                </div>
 		        		</div>
 			        	</div>
