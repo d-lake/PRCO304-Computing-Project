@@ -133,6 +133,13 @@ class ShopPage_Controller extends Page_Controller {
         $shop->ShopProfilePictureID = $id;
         $shop->write();
 
+        Session::set('ImageUploads', array());
+
+        foreach($data["Image"]["Files"] as $imageID) {
+            Session::add_to_array('ImageUploads', $imageID);
+        }
+        Session::save();
+
         return $this->redirectBack();
     }
 
@@ -161,6 +168,11 @@ class ShopPage_Controller extends Page_Controller {
         $id = $image->write();
         $shop->ShopCoverPictureID = $id;
         $shop->write();
+
+        foreach($data["Image"]["Files"] as $imageID) {
+            Session::add_to_array('ImageUploads', $imageID);
+        }
+        Session::save();
 
         return $this->redirectBack();    
     }
@@ -384,10 +396,21 @@ class ShopPage_Controller extends Page_Controller {
         $shop =  DataObject::get_one('Shop', "ID = '".$request->getVar('shopID')."'"); 
         if (Director::is_ajax()){
             $items = $shop->Item();
+            $sort = $request->getVar('sort');
+            $search = $request->getVar('search');
+            if($search == "null") {
+                Session::clear('Search');
+                Session::save();
+                $itemSet = $shop->Item();
 
-            if($request->getVar('search')) {
-               $searchArray = explode(" ", $request->getVar('search'));
-                $sort = $request->getVar('sort');
+                $items = new ArrayList();
+
+                foreach ($itemSet as $item) {
+                    $items->push($item);
+                }
+               
+            } else {
+                $searchArray = explode(" ", $search);
                 $explodedSearchArray = array_map('trim', $searchArray);
                 Session::clear('Search');
                 Session::save();
@@ -406,36 +429,31 @@ class ShopPage_Controller extends Page_Controller {
                     }
                 }
                 $items->removeDuplicates(); 
+            }   
 
-            }   if($request->getVar('sort')) {
-                switch ($sort) {
-                    case "Relevance":
+            switch ($sort) {
+                case "Relevance":
 
-                        break;
-                    case "Price: Lowest to Highest":
-                        $mappedArray = $items->map('ID', 'Price');
-                        asort($mappedArray);
-                        $items = new ArrayList();
-                        foreach ($mappedArray as $key => $itemPrice) {
-                            $pricedItem = DataObject::get_one('Item', "ID = '".$key."'");
-                            $items->push($pricedItem);
-                        }
-                        break;
-                    case "Price: Highest to Lowest":
-                        $mappedArray = $items->map('ID', 'Price');
-                        arsort($mappedArray);
-                        $items = new ArrayList();
-                        foreach ($mappedArray as $key => $itemPrice) {
-                            $pricedItem = DataObject::get_one('Item', "ID = '".$key."'");
-                            $items->push($pricedItem);
-                        }
-                        break;
-                }
-            }   else {
-                Session::clear('Search');
-                Session::save();
-                $items = $shop->Item();
-            }            
+                    break;
+                case "Price: Lowest to Highest":
+                    $mappedArray = $items->map('ID', 'Price');
+                    asort($mappedArray);
+                    $items = new ArrayList();
+                    foreach ($mappedArray as $key => $itemPrice) {
+                        $pricedItem = DataObject::get_one('Item', "ID = '".$key."'");
+                        $items->push($pricedItem);
+                    }
+                    break;
+                case "Price: Highest to Lowest":
+                    $mappedArray = $items->map('ID', 'Price');
+                    arsort($mappedArray);
+                    $items = new ArrayList();
+                    foreach ($mappedArray as $key => $itemPrice) {
+                        $pricedItem = DataObject::get_one('Item', "ID = '".$key."'");
+                        $items->push($pricedItem);
+                    }
+                    break;
+            }       
 
             $paginatedItems = PaginatedList::create(
                 $items,

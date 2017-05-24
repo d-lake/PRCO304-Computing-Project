@@ -217,36 +217,6 @@
 	    </div>
 	  </div>
 	</div>
-
-	<%-- <div class="upload modal fade" id="Add_Categories_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<a id="Close-Modal" class="modal-close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></a>
-	<div class="modal-dialog" role="document">
-	  <div class="modal-content">
-	    <div class="modal-header">
-	      <h4 class="modal-title" id="myModalLabel">Shop Categories</h4>
-	    </div>
-	    <div class="modal-body">
-	    <label id="Categories"class="left text-center"><h4>Categories</h4></label>
-	      <table class="table table-striped text-center">
-		    <tbody>
-			    <% loop $Shop.Category %>
-			      <tr>
-			        <td>$Category</td>
-			      </tr>
-			    <% end_loop %>
-		    </tbody>
-		  </table>
-		  <div class="field">
-              <label class="left">New Category</label>
-              <input type="text" name="title" class="text form-upload-title" maxlength="255" size="30" placeholder="Category">
-            </div>
-	    </div>
-	    <div class="modal-footer">
-	      <button id="Btn-No-Delete" type="button" data-dismiss="modal" data-for="editGallery" data-remove-files>Close</button>
-	    </div>
-	  </div>
-	</div>
-</div> --%>
 <div class="upload modal fade" id="Delete_Item_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<a id="Close-Modal" class="modal-close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></a>
 	<div class="modal-dialog" role="document">
